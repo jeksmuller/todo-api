@@ -1,19 +1,22 @@
 import { Router } from "express";
-import { loginUser, logoutUser, registerUser, updateprofile } from "../controllers/user.js";
+import { getProfile, loginUser, logoutUser, registerUser, updateprofile } from "../controllers/user.js";
 import { userAvatarUpload } from "../middlewares/upload.js";
+import { hasPermission, isAuthentication } from "../middlewares/auth.js";
 
 // create routes
 const userRouter = Router();
 
 // define routes
-userRouter.post('/users/register',registerUser )
+userRouter.post('/users/register', registerUser)
 
 userRouter.post('/users/login', loginUser)
 
-userRouter.post('/users/logout', logoutUser)
+userRouter.get('/users/me', isAuthentication, hasPermission('get_profile'), getProfile)
+
+userRouter.post('/users/logout', isAuthentication, logoutUser)
 
 
-userRouter.post('/users/me',  userAvatarUpload.single('avatar'), updateprofile);
+userRouter.patch('/users/me', isAuthentication, hasPermission('update_profile'), userAvatarUpload.single('avatar'), updateprofile);
 
 
 // export default
