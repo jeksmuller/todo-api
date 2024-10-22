@@ -1,5 +1,5 @@
 import { TodoModel } from "../models/todo.js";
-import { addTodoValidator } from "../validators/todo.js";
+import { addTodoValidator, updateTodoValidator } from "../validators/todo.js";
 
 export const addTodo = async (req, res, next) => {
     try {
@@ -23,10 +23,11 @@ export const addTodo = async (req, res, next) => {
 
 export const getTodos = async (req, res, next) => {
     try {
-        const { filter = "{}", limit = 10, skip = 0 } = req.query;
+        const { filter = "{}", sort = "{}", limit = 10, skip = 0 } = req.query;
         // Fetch todos from database
         const todos = await TodoModel
             .find(JSON.parse(filter))
+            .sort(json.parse(sort))
             .limit(limit)
             .skip(skip);
         // Return response
@@ -37,10 +38,54 @@ export const getTodos = async (req, res, next) => {
     }
 }
 
-export const updateTodo = (req, res, next) => {
-    res.json('Todo updated!');
+
+export const countTodos = async (req, res, next) => {
+    try {
+        const { } = req.query;
+        // count todos in database
+        const count = await TodoModel.countDocuments(JSON.parse(filter));
+        // respond to request
+        res.json({ count });
+    } catch (error) {
+        next(error);
+
+    }
 }
 
-export const deleteTodo = (req, res, next) => {
-    res.json('Todo deleted!');
+
+
+export const getTodo = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        // get todo by id from database
+        const todo = await TodoModel.findById(id);
+        // respond to request
+        res.json(todo);
+    } catch (error) {
+        next(error);
+
+    }
+}
+
+
+
+export const updateTodo = (req, res, next) => {
+    try {
+        const { } = updateTodoValidator
+        res.json('Todo updated!');
+    } catch (error) {
+        next(error)
+
+    }
+}
+
+export const deleteTodo = async (req, res, next) => {
+    try {
+        // delete a book and all books from database
+        const deleteAllBooks = await TodoModel.deleteOne(req.body.id)
+        res.json('Todo deleted!');
+    } catch (error) {
+        next(error);
+
+    }
 }

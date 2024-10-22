@@ -3,6 +3,7 @@ import { UserModel } from "../models/user.js";
 import { registerUserValidator, loginUserValidator, updateProfileValidator } from "../validators/user.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken"
+import 
 
 export const registerUser = async (req, res, next) => {
     try {
@@ -24,6 +25,10 @@ export const registerUser = async (req, res, next) => {
             password: hashedpassword
         });
         // send user confirmation email
+        await mailTransporter.sendMail({
+            to: value.email,
+            subject: 'user '
+        })
         // respond to request
         res.json('User registered!');
     } catch (error) {

@@ -12,6 +12,8 @@ const todoSchema = new Schema({
     timestamps: true
 });
 
+todoSchema.index({ name: 'text', title: 'text' });
+
 
 todoSchema.plugin(toJSON)
 
