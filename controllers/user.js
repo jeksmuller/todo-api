@@ -3,7 +3,7 @@ import { UserModel } from "../models/user.js";
 import { registerUserValidator, loginUserValidator, updateProfileValidator } from "../validators/user.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken"
-import 
+
 
 export const registerUser = async (req, res, next) => {
     try {
